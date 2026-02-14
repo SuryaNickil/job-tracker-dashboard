@@ -2,14 +2,18 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy requirements from backend directory
+# Copy backend requirements
 COPY backend/requirements.txt .
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy backend app code
+# Copy backend application code
 COPY backend/app ./app
 
-# Run the application
-CMD python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+# Expose port
+EXPOSE 8000
+
+# Run application
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
